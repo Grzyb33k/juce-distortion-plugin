@@ -166,7 +166,8 @@ bool DistortionPluginAudioProcessor::hasEditor() const
 
 juce::AudioProcessorEditor* DistortionPluginAudioProcessor::createEditor()
 {
-    return new DistortionPluginAudioProcessorEditor (*this);
+    //return new DistortionPluginAudioProcessorEditor (*this);
+    return new juce::GenericAudioProcessorEditor(*this);
 }
 
 //==============================================================================
@@ -181,6 +182,27 @@ void DistortionPluginAudioProcessor::setStateInformation (const void* data, int 
 {
     // You should use this method to restore your parameters from this memory block,
     // whose contents will have been created by the getStateInformation() call.
+}
+
+juce::AudioProcessorValueTreeState::ParameterLayout DistortionPluginAudioProcessor::createParameterLayout()
+{
+    juce::AudioProcessorValueTreeState::ParameterLayout layout;
+
+    layout.add(
+        std::make_unique<juce::AudioParameterFloat>("Gain",
+            "Gain",
+            juce::NormalisableRange<float>(0.f, 10.f, 1.f, 1.f),
+            1.f)
+    );
+
+    layout.add(
+        std::make_unique<juce::AudioParameterFloat>("Tone",
+            "Tone",
+            juce::NormalisableRange<float>(0.f, 10.f, 1.f, 1.f),
+            1.f)
+    );
+
+    return layout;
 }
 
 //==============================================================================
