@@ -10,6 +10,38 @@
 
 #include <JuceHeader.h>
 
+
+struct DistortionParameters
+{
+    float gain{ 1.f };
+    float tone{ 1.f };
+};
+
+DistortionParameters getDistortionParameters(juce::AudioProcessorValueTreeState& apvts);
+
+
+struct DistortionProcessor
+{
+    DistortionProcessor() = default;
+
+    void setParameters(const DistortionParameters& newParams)
+    {
+        params = newParams;
+    }
+
+    float processSample(float inputSample)
+    {
+        float x = inputSample;
+        x *= params.gain;
+        return std::tanh(x + 0.3f * x * x * x);
+    }
+
+private:
+    DistortionParameters params;
+};
+
+
+
 //==============================================================================
 /**
 */
@@ -58,6 +90,7 @@ public:
     juce::AudioProcessorValueTreeState apvts{*this, nullptr, "Parameters", createParameterLayout()};
 
 private:
+    DistortionProcessor distortionProcessor;
     //==============================================================================
     JUCE_DECLARE_NON_COPYABLE_WITH_LEAK_DETECTOR (DistortionPluginAudioProcessor)
 };

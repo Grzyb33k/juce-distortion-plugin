@@ -95,6 +95,7 @@ void DistortionPluginAudioProcessor::prepareToPlay (double sampleRate, int sampl
 {
     // Use this method as the place to do any pre-playback
     // initialisation that you need..
+
 }
 
 void DistortionPluginAudioProcessor::releaseResources()
@@ -150,11 +151,24 @@ void DistortionPluginAudioProcessor::processBlock (juce::AudioBuffer<float>& buf
     // the samples and the outer loop is handling the channels.
     // Alternatively, you can process the samples with the channels
     // interleaved by keeping the same state.
+
+    DistortionParameters params;
+
+    params.gain = apvts.getRawParameterValue("Gain")->load();
+    params.tone = apvts.getRawParameterValue("Tone")->load();
+
+    distortionProcessor.setParameters(params);
+
+
     for (int channel = 0; channel < totalNumInputChannels; ++channel)
     {
         auto* channelData = buffer.getWritePointer (channel);
 
-        // ..do something to the data...
+        for (int sample = 0; sample < buffer.getNumSamples(); sample++)
+        {
+            channelData[sample] = distortionProcessor.processSample(channelData[sample]);
+        }
+        
     }
 }
 
@@ -184,6 +198,17 @@ void DistortionPluginAudioProcessor::setStateInformation (const void* data, int 
     // whose contents will have been created by the getStateInformation() call.
 }
 
+
+DistortionParameters getDistortionParameters(juce::AudioProcessorValueTreeState& apvts)
+{
+    DistortionParameters parameters;
+
+    parameters.gain = apvts.getRawParameterValue("Gain")->load();
+    parameters.tone = apvts.getRawParameterValue("Tone")->load();
+
+    return parameters;
+}
+
 juce::AudioProcessorValueTreeState::ParameterLayout DistortionPluginAudioProcessor::createParameterLayout()
 {
     juce::AudioProcessorValueTreeState::ParameterLayout layout;
@@ -191,7 +216,7 @@ juce::AudioProcessorValueTreeState::ParameterLayout DistortionPluginAudioProcess
     layout.add(
         std::make_unique<juce::AudioParameterFloat>("Gain",
             "Gain",
-            juce::NormalisableRange<float>(0.f, 10.f, 1.f, 1.f),
+            juce::NormalisableRange<float>(0.f, 15.f, 0.01f, 1.f),
             1.f)
     );
 
