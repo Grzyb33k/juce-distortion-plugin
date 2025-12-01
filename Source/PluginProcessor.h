@@ -10,6 +10,7 @@
 
 #include <JuceHeader.h>
 #include <vector>
+#include <memory>
 
 
 struct DistortionParameters
@@ -21,8 +22,8 @@ struct DistortionParameters
 
 struct AnalogParameters
 {
-    float A{ 0.f }, B{ 0.f }, C{ 0.f };
-    float D{ 0.f }, E{ 0.f }, F{ 0.f };
+    double A{ 0.f }, B{ 0.f }, C{ 0.f };
+    double D{ 0.f }, E{ 0.f }, F{ 0.f };
 };
 
 DistortionParameters getDistortionParameters(juce::AudioProcessorValueTreeState& apvts);
@@ -68,12 +69,12 @@ private:
 
 void calculateCoefficients(Biquad& filter, AnalogParameters& p, float sampleRate)
 {
-    float T = 1.f / sampleRate;
+    double T = 1.0 / sampleRate;
 
-    float b0, b1, b2;
-    float a0, a1, a2;
+    double b0, b1, b2;
+    double a0, a1, a2;
 
-    float Tsq = T * T;
+    double Tsq = T * T;
 
     b0 = 4 * p.A / Tsq + 2 * p.B / T + p.C;
     b1 = 2 * p.C - 8 * p.A / Tsq;
@@ -90,7 +91,7 @@ void calculateCoefficients(Biquad& filter, AnalogParameters& p, float sampleRate
     a1 /= a0;
     a2 /= a0;
 
-    filter.setCoefficients(b0, b1, b2, a1, a2);
+    filter.setCoefficients((float)b0, (float)b1, (float)b2, (float)a1, (float)a2);
 }
 
 struct DistortionProcessor
@@ -127,6 +128,21 @@ struct DistortionProcessor
         float outputSample = processedSample * params.volume;
 
         return outputSample;
+    }
+
+    void processBlock(juce::dsp::AudioBlock<float>& block)
+    {
+        const auto numCh = block.getNumChannels();
+        const auto numS = block.getNumSamples();
+
+        for (size_t ch = 0; ch < numCh; ++ch)
+        {
+            auto* data = block.getChannelPointer(ch);
+            for (size_t n = 0; n < numS; ++n)
+            {
+                data[n] = processSample(data[n]);
+            }
+        }
     }
 
 
@@ -193,8 +209,8 @@ private:
     void updateConstFilters()
     {   
         // BJT stage
-        float w1 = 2 * pi * 3.f;
-        float w2 = 2 * pi * 600.f;
+        double w1 = 2 * pi * 3.f;
+        double w2 = 2 * pi * 600.f;
         bjtParams.A = 1.f;
         bjtParams.B = 0.f;
         bjtParams.C = 0.f;
@@ -206,8 +222,8 @@ private:
 
         // RC stage
 
-        float R = 2.2e3;
-        float C = 0.01e-6;
+        double R = 2.2e3;
+        double C = 0.01e-6;
 
         rcParams.C = 1.f;
         rcParams.E = R * C;
@@ -217,14 +233,14 @@ private:
 
         // Tone stage
 
-        float LpR    = 6.8e3;
-        float LpC    = 0.1e-6;
-        float hpR1   = 2.2e3;
-        float hpR2   = 6.8e3;
-        float hpC    = 0.022e-6;
-        float lpF    = 320.f;
-        float hpF    = 1.16e3;
-        float hpGain = hpR2 / (hpR1 + hpR2);
+        double LpR    = 6.8e3;
+        double LpC    = 0.1e-6;
+        double hpR1   = 2.2e3;
+        double hpR2   = 6.8e3;
+        double hpC    = 0.022e-6;
+        double lpF    = 320.f;
+        double hpF    = 1.16e3;
+        double hpGain = hpR2 / (hpR1 + hpR2);
 
         toneLpParams.C = 1.f;
         toneLpParams.E = 1.f / (2.f * pi * lpF);
@@ -243,13 +259,13 @@ private:
     {
         float dist = params.gain;
 
-        float Rt = dist * 100e3;
-        float Rb = (1.f - dist) * 100e3 + 4.7e3;
-        float Cz = 1e-6;
-        float Cc = 250e-12;
-        float a = 1 / (Rt * Cc);
-        float b = 1 / (Rb * Cz);
-        float c = 1 / (Rb * Cc);
+        double Rt = (double)dist * 100e3;
+        double Rb = (1.f - (double)dist) * 100e3 + 4.7e3;
+        double Cz = 1e-6;
+        double Cc = 250e-12;
+        double a = 1 / (Rt * Cc);
+        double b = 1 / (Rb * Cz);
+        double c = 1 / (Rb * Cc);
 
         opampParams.A = 1.f;
         opampParams.B = a + b + c;
@@ -314,6 +330,7 @@ public:
 private:
     DistortionProcessor distortionProcessor;
     std::array<DistortionProcessor, 2> distortionEngine;
+    std::unique_ptr<juce::dsp::Oversampling<float>> oversampler;
     //==============================================================================
     JUCE_DECLARE_NON_COPYABLE_WITH_LEAK_DETECTOR (DistortionPluginAudioProcessor)
 };

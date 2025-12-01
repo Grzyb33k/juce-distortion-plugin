@@ -93,14 +93,29 @@ void DistortionPluginAudioProcessor::changeProgramName (int index, const juce::S
 //==============================================================================
 void DistortionPluginAudioProcessor::prepareToPlay (double sampleRate, int samplesPerBlock)
 {
+    const int numChannels = getTotalNumInputChannels();
+    const int oversampleStages = 3;
+
+    oversampler.reset(new juce::dsp::Oversampling<float>(
+        (size_t)numChannels,
+        oversampleStages,
+        juce::dsp::Oversampling<float>::FilterType::filterHalfBandPolyphaseIIR,
+        true)
+    );
+
+
+    oversampler->initProcessing(samplesPerBlock);
+    auto ovRate = oversampler->getOversamplingFactor();
+    double ovSampleRate = sampleRate * ovRate;
+
     for (auto& engine : distortionEngine)
     {
-        
-        engine.prepare(sampleRate);
+        engine.prepare(ovSampleRate);
     }
 
 
     auto params = getDistortionParameters(apvts);
+
     for (auto& engine : distortionEngine)
         engine.updateParameters(params);
 }
@@ -143,24 +158,14 @@ void DistortionPluginAudioProcessor::processBlock (juce::AudioBuffer<float>& buf
     auto totalNumInputChannels  = getTotalNumInputChannels();
     auto totalNumOutputChannels = getTotalNumOutputChannels();
 
-    // In case we have more outputs than inputs, this code clears any output
-    // channels that didn't contain input data, (because these aren't
-    // guaranteed to be empty - they may contain garbage).
-    // This is here to avoid people getting screaming feedback
-    // when they first compile a plugin, but obviously you don't need to keep
-    // this code if your algorithm always overwrites all the output channels.
     for (auto i = totalNumInputChannels; i < totalNumOutputChannels; ++i)
         buffer.clear (i, 0, buffer.getNumSamples());
 
-    // This is the place where you'd normally do the guts of your plugin's
-    // audio processing...
-    // Make sure to reset the state if your inner loop is processing
-    // the samples and the outer loop is handling the channels.
-    // Alternatively, you can process the samples with the channels
-    // interleaved by keeping the same state.
-
     auto params = getDistortionParameters(apvts);
 
+    juce::dsp::AudioBlock<float> block(buffer);
+
+    auto oversampledBlock = oversampler->processSamplesUp(block);
 
     for (int channel = 0; channel < totalNumInputChannels; ++channel)
     {
@@ -170,12 +175,18 @@ void DistortionPluginAudioProcessor::processBlock (juce::AudioBuffer<float>& buf
 
         engine.updateParameters(params);
 
-        for (int sample = 0; sample < buffer.getNumSamples(); sample++)
+       /* for (int sample = 0; sample < buffer.getNumSamples(); sample++)
         {
             channelData[sample] = engine.processSample(channelData[sample]);
         }
-        
+        */
+
+        juce::dsp::AudioBlock<float> channelBlock(oversampledBlock.getSingleChannelBlock(channel));
+
+        engine.processBlock(channelBlock);
     }
+
+    oversampler->processSamplesDown(block);
 }
 
 //==============================================================================
