@@ -95,11 +95,11 @@ void DistortionPluginAudioProcessor::prepareToPlay (double sampleRate, int sampl
 {
     for (auto& engine : distortionEngine)
     {
-        // Jeœli dodasz oversampling, tu wpisz sampleRate * 4.0
+        
         engine.prepare(sampleRate);
     }
 
-    // Opcjonalnie: Pierwsze pobranie parametrów
+
     auto params = getDistortionParameters(apvts);
     for (auto& engine : distortionEngine)
         engine.updateParameters(params);
