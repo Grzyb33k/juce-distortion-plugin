@@ -166,7 +166,7 @@ private:
     Biquad bjt, opamp, rc, toneLP, toneHP;
     AnalogParameters bjtParams, opampParams, rcParams, toneLpParams, toneHpParams;
 
-    const float bjtGain = std::pow(10, 36.f/20.f);
+    const float bjtGain = std::pow(10, 42.f/20.f);
     const float aDiode = 0.405;
     const float bDiode = 3.178;
     const float pi = 3.14159265359f;

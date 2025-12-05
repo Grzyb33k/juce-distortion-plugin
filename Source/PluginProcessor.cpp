@@ -169,9 +169,10 @@ void DistortionPluginAudioProcessor::processBlock (juce::AudioBuffer<float>& buf
 
     for (int channel = 0; channel < totalNumInputChannels; ++channel)
     {
-        auto* channelData = buffer.getWritePointer (channel);
+        //auto* channelData = buffer.getWritePointer (channel);
 
-        auto& engine = distortionEngine[static_cast<size_t>(std::min(channel, 1))];
+        //auto& engine = distortionEngine[static_cast<size_t>(std::min(channel, 1))];
+        auto& engine = distortionEngine[channel];
 
         engine.updateParameters(params);
 
@@ -181,7 +182,8 @@ void DistortionPluginAudioProcessor::processBlock (juce::AudioBuffer<float>& buf
         }
         */
 
-        juce::dsp::AudioBlock<float> channelBlock(oversampledBlock.getSingleChannelBlock(channel));
+        //juce::dsp::AudioBlock<float> channelBlock(oversampledBlock.getSingleChannelBlock(channel));
+        auto channelBlock = oversampledBlock.getSingleChannelBlock(channel);
 
         engine.processBlock(channelBlock);
     }
