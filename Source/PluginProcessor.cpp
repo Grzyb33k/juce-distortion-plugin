@@ -118,6 +118,7 @@ void DistortionPluginAudioProcessor::prepareToPlay (double sampleRate, int sampl
 
     for (auto& engine : distortionEngine)
         engine.updateParameters(params);
+
 }
 
 void DistortionPluginAudioProcessor::releaseResources()

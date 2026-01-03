@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
 <FILTERGRAPH>
-  <FILTER uid="8" x="0.5" y="0.1" useARA="0">
+  <FILTER uid="1" x="0.5" y="0.1" useARA="0">
     <PLUGIN name="Audio Input" descriptiveName="" format="Internal" category="I/O devices"
             manufacturer="JUCE" version="1.0" file="" uniqueId="246006c0"
             isInstrument="0" fileTime="0" infoUpdateTime="0" numInputs="0"
@@ -16,7 +16,7 @@
       </OUTPUTS>
     </LAYOUT>
   </FILTER>
-  <FILTER uid="9" x="0.25" y="0.1" useARA="0">
+  <FILTER uid="2" x="0.25" y="0.1" useARA="0">
     <PLUGIN name="MIDI Input" descriptiveName="" format="Internal" category="I/O devices"
             manufacturer="JUCE" version="1.0" file="" uniqueId="a9e4f9eb"
             isInstrument="0" fileTime="0" infoUpdateTime="0" numInputs="0"
@@ -31,7 +31,7 @@
       </OUTPUTS>
     </LAYOUT>
   </FILTER>
-  <FILTER uid="10" x="0.5" y="0.9" useARA="0">
+  <FILTER uid="3" x="0.5" y="0.9" useARA="0">
     <PLUGIN name="Audio Output" descriptiveName="" format="Internal" category="I/O devices"
             manufacturer="JUCE" version="1.0" file="" uniqueId="724248cb"
             isInstrument="0" fileTime="0" infoUpdateTime="0" numInputs="2"
@@ -46,7 +46,7 @@
       </OUTPUTS>
     </LAYOUT>
   </FILTER>
-  <FILTER uid="11" x="0.25" y="0.9" useARA="0">
+  <FILTER uid="4" x="0.25" y="0.9" useARA="0">
     <PLUGIN name="MIDI Output" descriptiveName="" format="Internal" category="I/O devices"
             manufacturer="JUCE" version="1.0" file="" uniqueId="9d5bbb00"
             isInstrument="0" fileTime="0" infoUpdateTime="0" numInputs="0"
@@ -61,11 +61,11 @@
       </OUTPUTS>
     </LAYOUT>
   </FILTER>
-  <FILTER uid="12" x="0.4012658227848101" y="0.4705882352941176" useARA="0"
-          uiLastX_Normal="793" uiLastY_Normal="594" uiopen_Normal="1">
+  <FILTER uid="7" x="0.4759493670886076" y="0.4529411764705882" useARA="0"
+          uiLastX_Normal="505" uiLastY_Normal="253" uiopen_Normal="0">
     <PLUGIN name="distortionPlugin" format="VST3" category="Fx" manufacturer="yourcompany"
-            version="1.0.0" file="C:\Users\Grzyb3k\Documents\FT\DSP\distortionPlugin\Builds\VisualStudio2022\x64\Debug\VST3\distortionPlugin.vst3\Contents\x86_64-win\distortionPlugin.vst3"
-            uniqueId="ff9fd420" isInstrument="0" fileTime="19a49e54d53" infoUpdateTime="19a4a0dcf5e"
+            version="1.0.0" file="D:\FT\DSP\distortionPlugin\Builds\VisualStudio2022\x64\Debug\VST3\distortionPlugin.vst3\Contents\x86_64-win\distortionPlugin.vst3"
+            uniqueId="ff9fd420" isInstrument="0" fileTime="19b808390ab" infoUpdateTime="19b808dc191"
             numInputs="2" numOutputs="2" isShell="0" hasARAExtension="0"
             uid="e9595d67"/>
     <STATE>191.VMjLgXK....O+fWarAhckI2bo8la8HRLt.iHfTlai8FYo41Y8HRUTYTK3HxO9.BOVMEUy.Ea0cVZtMEcgQWY9vSRC8Vav8lak4Fc9XCLt3hKt3hKt3hKt3hYRUUSTEETIckVwTjQisVTTgkdEYjKAQjYPQSPWgUdMcjKAQjct3hdA4hKt3hKt3hKtnTUv.UQAslXuk0UXoWUFE0YQcEV77RRC8Vav8lak4Fc9vyKVMEUy.Ea0cVZtMEcgQWY9..</STATE>
@@ -78,13 +78,14 @@
       </OUTPUTS>
     </LAYOUT>
   </FILTER>
-  <FILTER uid="13" x="0.610126582278481" y="0.2921568627450981" useARA="0">
+  <FILTER uid="8" x="0.2784810126582278" y="0.3019607843137255" useARA="0"
+          uiLastX_Normal="81" uiLastY_Normal="372" uiopen_Normal="0">
     <PLUGIN name="AudioFilePlayer" format="VST3" category="Fx" manufacturer="Matkat Music LLC"
-            version="1.0.0" file="C:\Users\Grzyb3k\Documents\FT\DSP\AudioFilePlayer\Builds\VisualStudio2019\x64\Debug\VST3\AudioFilePlayer.vst3\Contents\x86_64-win\AudioFilePlayer.vst3"
-            uniqueId="79fe81c" isInstrument="0" fileTime="1987a2ccdde" infoUpdateTime="19a4a0dcf5e"
+            version="1.0.0" file="D:\FT\DSP\AudioFilePlayer\Builds\VisualStudio2019\x64\Debug\VST3\AudioFilePlayer.vst3\Contents\x86_64-win\AudioFilePlayer.vst3"
+            uniqueId="79fe81c" isInstrument="0" fileTime="1987a2ccdde" infoUpdateTime="19b808dc192"
             numInputs="2" numOutputs="2" isShell="0" hasARAExtension="0"
             uid="e95d02c7"/>
-    <STATE>191.VMjLgXK....O+fWarAhckI2bo8la8HRLt.iHfTlai8FYo41Y8HRUTYTK3HxO9.BOVMEUy.Ea0cVZtMEcgQWY9vSRC8Vav8lak4Fc9XCLt3hKt3hKt3hKt3hYRUUSTEETIckVwTjQisVTTgkdEYjKAQjYPQSPWgUdMcjKAQjct3hdA4hKt3hKt3hKtnTUv.UQAslXuk0UXoWUFE0YQcEV77RRC8Vav8lak4Fc9vyKVMEUy.Ea0cVZtMEcgQWY9..</STATE>
+    <STATE>283.VMjLgHQ....O+fWarAhckI2bo8la8HRLt.iHfTlai8FYo41Y8HRUTYTK3HxO9.BOVMEUy.Ea0cVZtMEcgQWY9vSRC8Vav8lak4Fc9DiL33BTIISX1UEaho2ZVkUdAAkKAwDUigWRWkEcQ0VTucmUY4BQtnTQLolShUELhsVRxHlXiolX0rVaXkmbFcUSUIiXu0jQW0TQVcmPFYDRxfCaZQWQrszbAICSt3hKt3hKt3hKt3hKt3FUUMTUDQEdqw1XmE0UYQTQFM1YAAkKAgDUjYWQwHVdAAkKAwjKtLlKt3hKt3hKt3hYRUUSTEETIckVwTjQisVTTgkdEYDOujzPu0Fbu4VYtQmO77hUSQ0LPwVcmklaSQWXzUlO..</STATE>
     <LAYOUT>
       <INPUTS>
         <BUS index="0" layout="L R"/>
@@ -94,8 +95,8 @@
       </OUTPUTS>
     </LAYOUT>
   </FILTER>
-  <CONNECTION srcFilter="12" srcChannel="0" dstFilter="10" dstChannel="0"/>
-  <CONNECTION srcFilter="12" srcChannel="1" dstFilter="10" dstChannel="1"/>
-  <CONNECTION srcFilter="13" srcChannel="0" dstFilter="12" dstChannel="0"/>
-  <CONNECTION srcFilter="13" srcChannel="1" dstFilter="12" dstChannel="1"/>
+  <CONNECTION srcFilter="7" srcChannel="0" dstFilter="3" dstChannel="0"/>
+  <CONNECTION srcFilter="7" srcChannel="1" dstFilter="3" dstChannel="1"/>
+  <CONNECTION srcFilter="8" srcChannel="0" dstFilter="7" dstChannel="0"/>
+  <CONNECTION srcFilter="8" srcChannel="1" dstFilter="7" dstChannel="1"/>
 </FILTERGRAPH>
