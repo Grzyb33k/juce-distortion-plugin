@@ -170,20 +170,10 @@ void DistortionPluginAudioProcessor::processBlock (juce::AudioBuffer<float>& buf
 
     for (int channel = 0; channel < totalNumInputChannels; ++channel)
     {
-        //auto* channelData = buffer.getWritePointer (channel);
-
-        //auto& engine = distortionEngine[static_cast<size_t>(std::min(channel, 1))];
         auto& engine = distortionEngine[channel];
 
         engine.updateParameters(params);
 
-       /* for (int sample = 0; sample < buffer.getNumSamples(); sample++)
-        {
-            channelData[sample] = engine.processSample(channelData[sample]);
-        }
-        */
-
-        //juce::dsp::AudioBlock<float> channelBlock(oversampledBlock.getSingleChannelBlock(channel));
         auto channelBlock = oversampledBlock.getSingleChannelBlock(channel);
 
         engine.processBlock(channelBlock);
@@ -200,8 +190,8 @@ bool DistortionPluginAudioProcessor::hasEditor() const
 
 juce::AudioProcessorEditor* DistortionPluginAudioProcessor::createEditor()
 {
-    //return new DistortionPluginAudioProcessorEditor (*this);
-    return new juce::GenericAudioProcessorEditor(*this);
+    return new DistortionPluginAudioProcessorEditor (*this);
+    //return new juce::GenericAudioProcessorEditor(*this);
 }
 
 //==============================================================================
@@ -237,7 +227,7 @@ juce::AudioProcessorValueTreeState::ParameterLayout DistortionPluginAudioProcess
     layout.add(
         std::make_unique<juce::AudioParameterFloat>("Gain",
             "Gain",
-            juce::NormalisableRange<float>(0.01f, 0.99f, 0.01f, 1.f),
+            juce::NormalisableRange<float>(0.f, 1.f, 0.01f, 1.f),
             0.5f)
     );
 
