@@ -27,6 +27,14 @@ public:
 private:
     // This reference is provided as a quick way for your editor to
     // access the processor object that created it.
+    juce::Slider distortionSlider, toneSlider, volumeSlider;
+	juce::Label distortionLabel, toneLabel, volumeLabel, infoLabel;
+
+	using Attachment = juce::AudioProcessorValueTreeState::SliderAttachment;
+	std::unique_ptr<Attachment> distortionAttachment;
+	std::unique_ptr<Attachment> toneAttachment;
+	std::unique_ptr<Attachment> volumeAttachment;
+
     DistortionPluginAudioProcessor& audioProcessor;
 
     JUCE_DECLARE_NON_COPYABLE_WITH_LEAK_DETECTOR (DistortionPluginAudioProcessorEditor)
