@@ -31,11 +31,11 @@ struct DS1Parameters
     // Parametry BJT
     static constexpr double bjtLowPassFreq  =   591.5;
     static constexpr double bjtHighPassFreq =   111.1e3;
-    static constexpr double bjtGain         =   3.2;
+    static constexpr double bjtGain         =   1.0;
     static constexpr double bjtFitA         =   27.075;
     static constexpr double bjtFitB         =   4.083;
     static constexpr double bjtFitC         =   8.820;
-    static constexpr double bjtInputBias    = - 0.101;
+    static constexpr double bjtInputBias    = - 0.0;
     static constexpr double bjtEdge         =   0.02845;
 
     // Parametry OPAMP
@@ -113,7 +113,7 @@ private:
 
 };
 
-void calculateCoefficients(Biquad& filter, AnalogParameters& p, float sampleRate)
+inline void calculateCoefficients(Biquad& filter, AnalogParameters& p, float sampleRate)
 {
     double T = 1.0 / (double)sampleRate;
 
@@ -255,9 +255,9 @@ private:
         double edge = DS1Parameters::bjtEdge;
         double ib = DS1Parameters::bjtInputBias;
 
-        /*y = y < edge - ib?
+        y = y < edge - ib ?
             (bjtConst * (1 - std::exp(a * y))) :
-            (bjtConst - c);*/
+            (bjtConst - c);
 
         return y;
     }
@@ -286,7 +286,6 @@ private:
             y = y > 0 ? DS1Parameters::opampMaxAmplitude : -DS1Parameters::opampMaxAmplitude;
         }
 
-        //y = y > 0 ? 4.55 * std::tanh(y / 4.55) : 4.4 * std::tanh(y / 4.4);
 		opampLastOutput = y;
 
         return y;
@@ -294,7 +293,6 @@ private:
 
     double processClipper(double x)
     {
-        //float xClipped = aDiode * std::atan(x * bDiode);
 		double a = DS1Parameters::diodeFitA;
 		double b = DS1Parameters::diodeFitB;
 		double c = DS1Parameters::diodeFitC;
@@ -320,7 +318,7 @@ private:
         double w2 = 2 * pi * DS1Parameters::bjtHighPassFreq;
 
         bjtParams.A = 0.f;
-        bjtParams.B = bjtGain * w2;
+        bjtParams.B = DS1Parameters::bjtGain * w2;
         bjtParams.C = 0.f;
 
         bjtParams.D = 1.f;
@@ -343,31 +341,6 @@ private:
         rcParams.F = 1.f;
 
         calculateCoefficients(rc, rcParams, sampleRate);
-
-        // Tone stage
-
-        /*
-        double LpR    = 6.8e3;
-        double LpC    = 0.1e-6;
-        double hpR1   = 2.2e3;
-        double hpR2   = 6.8e3;
-        double hpC    = 0.022e-6;
-        double lpF    = 320.f;
-        double hpF    = 1.16e3;
-        double hpGain = hpR2 / (hpR1 + hpR2);
-
-        toneLpParams.C = 1.f;
-        toneLpParams.E = 1.f / (2.f * pi * lpF);
-        toneLpParams.F = 1.f;
-
-        toneHpParams.B = hpGain;
-        toneHpParams.E = 1.f;
-        toneHpParams.F = 2.f * pi * hpF;
-
-        calculateCoefficients(toneLP, toneLpParams, sampleRate);
-        calculateCoefficients(toneHP, toneHpParams, sampleRate);
-        */
-
     }
 
     void updateOpAmpFilter()
@@ -387,22 +360,6 @@ private:
 		opampParams.F = 1.f / CS;
         
         calculateCoefficients(opamp, opampParams, sampleRate);
-
-        /*double Rt = (double)dist * 100e3;
-        double Rb = (1.f - (double)dist) * 100e3 + 4.7e3;
-        double Cz = 1e-6;
-        double Cc = 250e-12;
-        double a = 1 / (Rt * Cc);
-        double b = 1 / (Rb * Cz);
-        double c = 1 / (Rb * Cc);
-
-        opampParams.A = 1.f;
-        opampParams.B = a + b + c;
-        opampParams.C = a * b;
-        opampParams.D = 1.f;
-        opampParams.E = a + b;
-        opampParams.F = a * b;*/
-
     }
 
     void updateToneFilter()
